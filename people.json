@@ -1,0 +1,20 @@
+{
+  "1": {
+    "name": "Jan Kowalski",
+    "description": "Rozmowa o projekcie X",
+    "lastSpoke": "2026-01-05T09:30:00",
+    "group_id": 1
+  },
+  "2": {
+    "name": "Anna Nowak",
+    "description": "Krótki call",
+    "lastSpoke": "2026-01-02T14:00:00",
+    "group_id": 2
+  },
+  "3": {
+    "name": "Paweł Wiśniewski",
+    "description": "Spotkanie zespołu",
+    "lastSpoke": "2026-01-03T10:15:00",
+    "group_id": 1
+  }
+}
