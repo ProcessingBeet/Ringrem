@@ -13,17 +13,56 @@ static class DataIO
                 ?? new Dictionary<int, JsonElement>();
     }
 
-    static bool CheckData(Dictionary<int, JsonElement> data)
+    static bool CheckData(string path, Dictionary<int, JsonElement> newData)
     {
-        return true;
+        Dictionary<int, JsonElement> oldData = LoadData(path);
+        JsonElement firstElement = oldData.First().Value;
+        HashSet<string> oldFieldNames = new HashSet<string>();
+        if (firstElement.ValueKind == JsonValueKind.Object)
+        {
+            oldFieldNames = new HashSet<string>(
+            firstElement.EnumerateObject().Select(p => p.Name)
+            );
+        }
+        foreach (JsonElement elt in newData.Values)
+        {
+            if (elt.ValueKind != JsonValueKind.Object)
+                return true;
+            HashSet<string> newFieldNames = new HashSet<string>(
+            firstElement.EnumerateObject().Select(p => p.Name)
+            );
+            if (!newFieldNames.SetEquals(oldFieldNames))
+                return true;
+        }
+        return false;
     }
 
-    public static void SaveData(string path, Dictionary<int, JsonElement> newData)
+    public static bool SaveData(string path, Dictionary<int, JsonElement> newData)
     {
+        if (CheckData(path, newData))
+        {
+            Console.WriteLine("Error: Saved data is incompatibile with data stored.");
+            return false;
+        }
+        try
+        {
+            using var stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
+            writer.WriteStartObject();
+            foreach (var elt in newData)
+            {
+                writer.WritePropertyName(elt.Key.ToString()); // JSON wymaga string jako klucz
+                elt.Value.WriteTo(writer);
+            }
+            writer.WriteEndObject();
 
-        if (!File.Exists(path))
-            File.Delete(path);
-
+            return true; // zapis zakończony sukcesem
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd przy zapisie JSON: {ex.Message}");
+            return false;
+        }
     }
 
 }
