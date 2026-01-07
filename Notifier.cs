@@ -6,6 +6,7 @@ bool now = args.Contains("--now");
 DateTime time = DateTime.Now;
 
 string dataPath = Path.Combine(AppContext.BaseDirectory, "people.json");
+string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
 
 
 static void SendNotification(string title, string message)
@@ -21,6 +22,33 @@ if (debug)
     string data = File.ReadAllText(dataPath);
     Console.WriteLine($"\nData stored:\n{data}\n\nData read (first 5):");
     var dataDict = DataIO.LoadData(dataPath);
-    foreach (var elt in dataDict.Take(5))
-        Console.WriteLine($"{elt.Key} : {elt.Value}");
+    Parser.Print(dataDict);
+    Console.WriteLine("Checking data menagment:\nThere are such groups in groups:");
+    var groups = DataIO.LoadData(groupsPath);
+    Parser.Print(groups);
+    
+    var newGroupsdata = new Dictionary<int, Dictionary<string, object>>
+    {
+        { 2, new Dictionary<string, object>
+            {
+                { "description", "Projekt Y" },
+                { "breakLenght", 14 }
+            }
+        }
+    };
+    if(DataIO.SaveData(groupsPath, Parser.ToJsonElts(newGroupsdata)))
+    {
+        Console.WriteLine("Saving failed.");
+        Environment.Exit(1);
+    }
+    Console.WriteLine("Saving succeded, new groups are:");
+    var newGroups = DataIO.LoadData(groupsPath);
+    Parser.Print(newGroups);
+    if(DataIO.SaveData(groupsPath, groups))
+    {
+        Console.WriteLine("but saving old groups failed.");
+        Environment.Exit(1);
+    }
+    Console.WriteLine("and saving old groups succeded.");
+    
 }

@@ -42,7 +42,7 @@ static class DataIO
         if (CheckData(path, newData))
         {
             Console.WriteLine("Error: Saved data is incompatibile with data stored.");
-            return false;
+            return true;
         }
         try
         {
@@ -56,12 +56,12 @@ static class DataIO
             }
             writer.WriteEndObject();
 
-            return true; // zapis zakończony sukcesem
+            return false; // zapis zakończony sukcesem
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Błąd przy zapisie JSON: {ex.Message}");
-            return false;
+            return true;
         }
     }
 
