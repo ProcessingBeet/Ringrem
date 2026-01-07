@@ -27,22 +27,22 @@ static class DataIO
         foreach (JsonElement elt in newData.Values)
         {
             if (elt.ValueKind != JsonValueKind.Object)
-                return true;
+                return false;
             HashSet<string> newFieldNames = new HashSet<string>(
             firstElement.EnumerateObject().Select(p => p.Name)
             );
             if (!newFieldNames.SetEquals(oldFieldNames))
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
     public static bool SaveData(string path, Dictionary<int, JsonElement> newData)
     {
-        if (CheckData(path, newData))
+        if (!CheckData(path, newData))
         {
             Console.WriteLine("Error: Saved data is incompatibile with data stored.");
-            return true;
+            return false;
         }
         try
         {
@@ -56,12 +56,12 @@ static class DataIO
             }
             writer.WriteEndObject();
 
-            return false; // zapis zakończony sukcesem
+            return true; // zapis zakończony sukcesem
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Błąd przy zapisie JSON: {ex.Message}");
-            return true;
+            return false;
         }
     }
 

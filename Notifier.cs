@@ -1,54 +1,75 @@
-﻿// using System.Diagnostics;
-
-bool debug = args.Contains("--debug");
-bool now = args.Contains("--now");
-
-DateTime time = DateTime.Now;
-
-string dataPath = Path.Combine(AppContext.BaseDirectory, "people.json");
-string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
-
-
-static void SendNotification(string title, string message)
+﻿class Program
 {
-    System.Diagnostics.Process.Start("notify-send", $"\"{title}\"  \"{message}\"");
-}
+    static bool debug = false;
+    static bool now = false;
 
-if (debug)
-{
-    SendNotification("Debug", "Debugging message");
-    Console.WriteLine($"Debug log:\nLocal time is {time.ToString()}");
-    Console.WriteLine(dataPath);
-    string data = File.ReadAllText(dataPath);
-    Console.WriteLine($"\nData stored:\n{data}\n\nData read (first 5):");
-    var dataDict = DataIO.LoadData(dataPath);
-    Parser.Print(dataDict);
-    Console.WriteLine("Checking data menagment:\nThere are such groups in groups:");
-    var groups = DataIO.LoadData(groupsPath);
-    Parser.Print(groups);
-    
-    var newGroupsdata = new Dictionary<int, Dictionary<string, object>>
+    static void Main(string[] args)
     {
-        { 2, new Dictionary<string, object>
-            {
-                { "description", "Projekt Y" },
-                { "breakLenght", 14 }
-            }
+        debug = args.Contains("--debug");
+        now = args.Contains("--now");
+
+        if (debug)
+        {
+            string dataPath = Path.Combine(AppContext.BaseDirectory, "people.json");
+            string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
+            RunDebug(dataPath, groupsPath);
         }
-    };
-    if(DataIO.SaveData(groupsPath, Parser.ToJsonElts(newGroupsdata)))
-    {
-        Console.WriteLine("Saving failed.");
-        Environment.Exit(1);
+
+        if (now)
+        {
+            SendNotification("Reminder", "It's time to do something!");
+        }
+
     }
-    Console.WriteLine("Saving succeded, new groups are:");
-    var newGroups = DataIO.LoadData(groupsPath);
-    Parser.Print(newGroups);
-    if(DataIO.SaveData(groupsPath, groups))
+
+    private static void RunDebug(string dataPath, string groupsPath)
     {
-        Console.WriteLine("but saving old groups failed.");
-        Environment.Exit(1);
+        DateTime time = DateTime.Now;
+
+        SendNotification("Debug", "Debugging message");
+        Console.WriteLine($"Debug log:\nLocal time is {time}");
+        Console.WriteLine(dataPath);
+
+        string data = File.ReadAllText(dataPath);
+        Console.WriteLine($"\nData stored:\n{data}\n\nData read (first 5):");
+
+        var dataDict = DataIO.LoadData(dataPath);
+        Parser.Print(dataDict);
+
+        Console.WriteLine("Checking groups:");
+        var groups = DataIO.LoadData(groupsPath);
+        Parser.Print(groups);
+
+        var newGroupsData = new Dictionary<int, Dictionary<string, object>>
+        {
+            { 2, new Dictionary<string, object>
+                {
+                    { "description", "Projekt X" },
+                    { "breakLenght", 23 }
+                }
+            }
+        };
+
+        if (!DataIO.SaveData(groupsPath, Parser.ToJsonElts(newGroupsData)))
+        {
+            Console.WriteLine("Saving failed.");
+            Environment.Exit(1);
+        }
+
+        Console.WriteLine("Saving succeeded, new groups:");
+        var newGroups = DataIO.LoadData(groupsPath);
+        Parser.Print(newGroups);
+
+        if (!DataIO.SaveData(groupsPath, groups))
+        {
+            Console.WriteLine("Restoring old groups failed.");
+            Environment.Exit(1);
+        }
+        Console.WriteLine("Restored old groups successfully.");
     }
-    Console.WriteLine("and saving old groups succeded.");
-    
+
+    private static void SendNotification(string title, string message)
+    {
+        System.Diagnostics.Process.Start("notify-send", $"\"{title}\" \"{message}\"");
+    }
 }
