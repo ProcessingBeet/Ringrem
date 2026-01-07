@@ -1,10 +1,10 @@
 {
   "1": {
-    "description": "Projekt X",
+    "grp_description": "Projekt X",
     "breakLenght": 7
   },
   "2": {
-    "description": "Projekt Y",
+    "grp_description": "Projekt Y",
     "breakLenght": 14
   }
 }

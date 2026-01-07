@@ -13,7 +13,22 @@ static class Parser
         }
         return result;
     }
-    public static void Print(Dictionary<int, JsonElement> data, int howMuch = 5)
+
+    public static Dictionary<int, Dictionary<string, object>> FromJsonElts(Dictionary<int, JsonElement> input)
+    {
+        var result = new Dictionary<int, Dictionary<string, object>>();
+
+        foreach (var elt in input)
+        {
+            var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(elt.Value.GetRawText());
+            result[elt.Key] = dict ?? new Dictionary<string, object>();
+        }
+
+        return result;
+    }
+
+
+    public static void PrintJsonElts(Dictionary<int, JsonElement> data, int howMuch = 5)
     {
         foreach (var elt in data.Take(howMuch))
             Console.WriteLine($"{elt.Key} : {elt.Value}");

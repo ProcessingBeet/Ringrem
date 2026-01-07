@@ -23,9 +23,8 @@
         string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
 
         Console.WriteLine("RunCheck!");
-        var people = DataIO.LoadData(peoplePath); var groups = DataIO.LoadData(groupsPath);
-
-
+        var people = Parser.FromJsonElts(DataIO.LoadData(peoplePath)); 
+        var groups = Parser.FromJsonElts(DataIO.LoadData(groupsPath));
         
     }
 
@@ -43,17 +42,17 @@
         Console.WriteLine($"\nData stored:\n{people}\n\nData read (first 5):");
 
         var peopleDict = DataIO.LoadData(peoplePath);
-        Parser.Print(peopleDict);
+        Parser.PrintJsonElts(peopleDict);
 
         Console.WriteLine("Checking groups:");
         var groups = DataIO.LoadData(groupsPath);
-        Parser.Print(groups);
+        Parser.PrintJsonElts(groups);
 
         var newGroupsData = new Dictionary<int, Dictionary<string, object>>
         {
             { 2, new Dictionary<string, object>
                 {
-                    { "description", "Projekt X" },
+                    { "grp_description", "Projekt X" },
                     { "breakLenght", 23 }
                 }
             }
@@ -67,7 +66,7 @@
 
         Console.WriteLine("Saving succeeded, new groups:");
         var newGroups = DataIO.LoadData(groupsPath);
-        Parser.Print(newGroups);
+        Parser.PrintJsonElts(newGroups);
 
         if (!DataIO.SaveData(groupsPath, groups))
         {
@@ -75,5 +74,6 @@
             Environment.Exit(1);
         }
         Console.WriteLine("Restored old groups successfully.");
+
     }
 }
