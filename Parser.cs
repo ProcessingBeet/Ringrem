@@ -28,9 +28,24 @@ static class Parser
     }
 
 
-    public static void PrintJsonElts(Dictionary<int, JsonElement> data, int howMuch = 5)
+    public static void Print<T>(Dictionary<int, T> data, int howMuch = 5)
     {
         foreach (var elt in data.Take(howMuch))
-            Console.WriteLine($"{elt.Key} : {elt.Value}");
+            Console.WriteLine($"{elt.Key} : {FormatValue(elt.Value)}");
     }
+
+    static string FormatValue(object? value)
+    {
+        if (value == null)
+            return "null";
+
+        if (value is JsonElement json)
+            return json.GetRawText();
+
+        if (value is Dictionary<string, object> dict)
+            return JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = true });
+
+        return value.ToString() ?? "<unprintable>";
+    }
+
 }

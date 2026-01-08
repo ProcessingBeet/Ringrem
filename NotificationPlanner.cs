@@ -42,11 +42,11 @@
         Console.WriteLine($"\nData stored:\n{people}\n\nData read (first 5):");
 
         var peopleDict = DataIO.LoadData(peoplePath);
-        Parser.PrintJsonElts(peopleDict);
+        Parser.Print(peopleDict);
 
         Console.WriteLine("Checking groups:");
         var groups = DataIO.LoadData(groupsPath);
-        Parser.PrintJsonElts(groups);
+        Parser.Print(groups);
 
         var newGroupsData = new Dictionary<int, Dictionary<string, object>>
         {
@@ -66,7 +66,7 @@
 
         Console.WriteLine("Saving succeeded, new groups:");
         var newGroups = DataIO.LoadData(groupsPath);
-        Parser.PrintJsonElts(newGroups);
+        Parser.Print(newGroups);
 
         if (!DataIO.SaveData(groupsPath, groups))
         {
