@@ -7,13 +7,13 @@
   },
   "2": {
     "name": "Anna Nowak",
-    "ppl_description": "Krótki call",
+    "ppl_description": "Krotki call",
     "lastSpoke": "2026-01-02T14:00:00",
     "group_id": 2
   },
   "3": {
-    "name": "Paweł Wiśniewski",
-    "ppl_description": "Spotkanie zespołu",
+    "name": "Pawel Wisniewski",
+    "ppl_description": "Spotkanie zespolu",
     "lastSpoke": "2026-01-03T10:15:00",
     "group_id": 1
   }

@@ -23,8 +23,8 @@
         string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
 
         Console.WriteLine("RunCheck!");
-        var people = Parser.FromJsonElts(DataIO.LoadData(peoplePath)); 
-        var groups = Parser.FromJsonElts(DataIO.LoadData(groupsPath));
+        var people = DataIO.LoadData(peoplePath); 
+        var groups = DataIO.LoadData(groupsPath);
         
     }
 
@@ -58,7 +58,7 @@
             }
         };
 
-        if (!DataIO.SaveData(groupsPath, Parser.ToJsonElts(newGroupsData)))
+        if (!DataIO.SaveData(groupsPath, newGroupsData))
         {
             Console.WriteLine("Saving failed.");
             Environment.Exit(1);
