@@ -23,8 +23,7 @@
         string groupsPath = Path.Combine(AppContext.BaseDirectory, "groups.json");
 
         Console.WriteLine("RunCheck!");
-        var people = DataIO.LoadData(peoplePath); 
-        var groups = DataIO.LoadData(groupsPath);
+        var people = DataIO.LoadData(peoplePath); var groups = DataIO.LoadData(groupsPath);
         
     }
 
@@ -73,7 +72,10 @@
             Console.WriteLine("Restoring old groups failed.");
             Environment.Exit(1);
         }
-        Console.WriteLine("Restored old groups successfully.");
+        Console.WriteLine("Restored old groups successfully.\nChecking merging function. \nBelow result of people and groups by group id:");
+
+        var mergedData = Queries.JoinAtGroupID(peopleDict, groups);
+        Parser.Print(mergedData);
 
     }
 }

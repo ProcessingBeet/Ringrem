@@ -14,18 +14,34 @@ static class Parser
         return result;
     }
 
-    public static Dictionary<int, Dictionary<string, object>> FromJsonElts(Dictionary<int, JsonElement> input)
-    {
-        var result = new Dictionary<int, Dictionary<string, object>>();
-
-        foreach (var elt in input)
+        public static Dictionary<int, Dictionary<string, object>> FromJsonElts(Dictionary<int, JsonElement> input)
         {
-            var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(elt.Value.GetRawText());
-            result[elt.Key] = dict ?? new Dictionary<string, object>();
+            var result = new Dictionary<int, Dictionary<string, object>>();
+
+            foreach (var elt in input)
+            {
+                var dict = new Dictionary<string, object>();
+
+                foreach (var prop in elt.Value.EnumerateObject())
+                {
+                    object value = prop.Value.ValueKind switch
+                    {
+                        JsonValueKind.String => prop.Value.GetString()!,
+                        JsonValueKind.Number => prop.Value.GetInt32(),
+                        JsonValueKind.True => true,
+                        JsonValueKind.False => false,
+                        _ => prop.Value
+                    };
+
+                    dict[prop.Name] = value;
+                }
+
+                result[elt.Key] = dict;
+            }
+
+            return result;
         }
 
-        return result;
-    }
 
 
     public static void Print<T>(Dictionary<int, T> data, int howMuch = 5)
