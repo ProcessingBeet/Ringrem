@@ -1,10 +1,13 @@
 {
   "1": {
     "grp_description": "Projekt X",
-    "breakLenght": 7
+    "intervalDays": 7.0,
+    "notifyHour": 1.0
+
   },
   "2": {
     "grp_description": "Projekt Y",
-    "breakLenght": 14
+    "intervalDays": 14.0,
+    "notifyHour": 9.0
   }
 }

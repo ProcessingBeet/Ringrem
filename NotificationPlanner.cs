@@ -25,6 +25,21 @@
         Console.WriteLine("RunCheck!");
         var people = DataIO.LoadData(peoplePath); var groups = DataIO.LoadData(groupsPath);
         
+        var mergedData = Queries.JoinAtGroupID(people, groups);
+        var toNotify = new List<int>();
+        foreach(var person in mergedData)
+        {
+            string lastSpokeRaw = (string)(person.Value["lastSpoke"]);
+            DateTime lastSpoke = DateTime.Parse(lastSpokeRaw);
+            DateTime notifyAt = lastSpoke.Date.AddDays((double)person.Value["intervalDays"]).AddHours((double)person.Value["notifyHour"]);
+            // Console.WriteLine($"{lastSpoke} and later {notifyAt}");
+            if (currentTime >= notifyAt)
+                toNotify.Add(person.Key);
+        }
+        foreach(int index in toNotify)
+        {
+            Notifier.SendNotification((string)mergedData[index]["name"], (string)mergedData[index]["ppl_description"]);
+        }
     }
 
     private static void RunDebug()
@@ -52,7 +67,8 @@
             { 2, new Dictionary<string, object>
                 {
                     { "grp_description", "Projekt X" },
-                    { "breakLenght", 23 }
+                    { "intervalDays", 23 },
+                    { "notifyHour", 14}
                 }
             }
         };
@@ -76,6 +92,7 @@
 
         var mergedData = Queries.JoinAtGroupID(peopleDict, groups);
         Parser.Print(mergedData);
+        Console.WriteLine(mergedData[1].Keys);
 
     }
 }

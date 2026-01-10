@@ -27,7 +27,7 @@ static class Parser
                     object value = prop.Value.ValueKind switch
                     {
                         JsonValueKind.String => prop.Value.GetString()!,
-                        JsonValueKind.Number => prop.Value.GetInt32(),
+                        JsonValueKind.Number =>  prop.Value.TryGetInt32(out int i) ? (object)i : prop.Value.GetDouble(),
                         JsonValueKind.True => true,
                         JsonValueKind.False => false,
                         _ => prop.Value
