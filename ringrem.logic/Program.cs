@@ -94,7 +94,6 @@
 
         var mergedData = Queries.JoinAtGroupID(peopleDict, groups);
         Parser.Print(mergedData);
-        Console.WriteLine(mergedData[1].Keys);
 
     }
 }
