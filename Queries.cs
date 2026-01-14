@@ -24,4 +24,38 @@ static class Queries
         }
         return result;
     }
+
+    public static void AddPerson(Dictionary<int, Dictionary<string, object>> dict, 
+    string name, string description, DateTime lastSpoke, int groupId)
+    {   
+        int newId = dict.Count > 0 ? dict.Keys.Max() + 1 : 0;
+        string lastSpokeStr = Parser.DateToStr(lastSpoke);
+
+        dict[newId] = new Dictionary<string, object>
+            {
+                ["name"] = name,
+                ["ppl_description"] = description,
+                ["lastSpoke"] = lastSpokeStr,
+                ["group_id"] = groupId
+            };
+    }
+
+    public static void AddGroup( Dictionary<int, Dictionary<string, object>> dict,
+    string description, double intervalDays, double notifyHour)
+    {
+        int newId = dict.Count > 0 ? dict.Keys.Max() + 1 : 0;
+
+        dict[newId] = new Dictionary<string, object>
+        {
+            ["grp_description"] = description,
+            ["intervalDays"] = intervalDays,
+            ["notifyHour"] = notifyHour
+        };
+    }
+
+    public static bool DeleteElt( Dictionary<int, Dictionary<string, object>> dict, int id)
+    {
+        return dict.Remove(id);
+    }
+
 }

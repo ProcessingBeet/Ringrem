@@ -63,5 +63,9 @@ static class Parser
 
         return value.ToString() ?? "<unprintable>";
     }
+    public static string DateToStr(DateTime date)
+    {
+        return date.ToString("yyyy-MM-ddTHH:mm:ss");
+    }
 
 }

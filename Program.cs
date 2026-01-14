@@ -39,7 +39,9 @@
         foreach(int index in toNotify)
         {
             Notifier.SendNotification((string)mergedData[index]["name"], (string)mergedData[index]["ppl_description"]);
+            people[index]["lastSpoke"] = Parser.DateToStr(currentTime);
         }
+        DataIO.SaveData(peoplePath, people);
     }
 
     private static void RunDebug()
