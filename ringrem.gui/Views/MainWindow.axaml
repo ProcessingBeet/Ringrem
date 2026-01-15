@@ -7,7 +7,7 @@
         x:Class="ringrem.gui.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="ringrem.gui">
+        Title="Ringrem">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -15,6 +15,9 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <StackPanel>
+        <TextBlock Text="Hello Avalonia" />
+        <TextBlock Text="David Podsiadlo" />
+    </StackPanel>
 
 </Window>
