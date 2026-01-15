@@ -1,13 +1,13 @@
 {
   "1": {
     "grp_description": "Projekt X",
-    "intervalDays": 7.0,
-    "notifyHour": 1.0
+    "interval_days": 7.0,
+    "notify_hour": 1.0
 
   },
   "2": {
     "grp_description": "Projekt Y",
-    "intervalDays": 14.0,
-    "notifyHour": 9.0
+    "interval_days": 14.0,
+    "notify_hour": 9.0
   }
 }

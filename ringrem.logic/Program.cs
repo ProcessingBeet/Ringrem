@@ -69,8 +69,8 @@
             { 2, new Dictionary<string, object>
                 {
                     { "grp_description", "Projekt X" },
-                    { "intervalDays", 23 },
-                    { "notifyHour", 14}
+                    { "interval_days", 23 },
+                    { "notify_hour", 14}
                 }
             }
         };
