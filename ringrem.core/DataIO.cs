@@ -3,16 +3,28 @@ using System.Text.Json;
 
 static class DataIO
 {
-    public static List<T> LoadData<T>(string path)
+    public static List<T> LoadData<T>(string path, Models.ILog? log)
     {
         if (!File.Exists(path))
+        {
+            log?.Log($"File {path} does not exist.");
             return new List<T>();
+        }
+            
+        try
+        {
+           string json = File.ReadAllText(path);
+           var result = JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+           log?.Log($"{path} loaded succesfully.");
+           return result;
+        }
+        catch (Exception ex)
+        {
+            log?.Log(ex.Message);
+            return new List<T>();
+        }
+
         
-        string json = File.ReadAllText(path);
-
-        var result = JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
-
-        return result;
     }
     public static bool SaveData<T>(string path, List<T> newData, Models.ILog? log)
     {

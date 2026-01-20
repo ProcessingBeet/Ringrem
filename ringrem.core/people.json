@@ -3,7 +3,7 @@
     "Id" : 1,
     "Name": "Jan Kowalski",
     "Description": "Rozmowa o projekcie X",
-    "lastSpoke": "2026-01-05T09:30:00",
+    "LastSpoke": "2026-01-05T09:30:00",
     "GroupId": 1
   },
   {
