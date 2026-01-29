@@ -34,14 +34,13 @@ This is **not a calendar app** — it’s a lightweight reminder system based on
 
 ## Current state
 
-- Core logic is to be fully implemented
-- UI is **not ready yet** (currently only CLI interface)
+- Core logic is fully implemented
+- GUI is **not ready yet** (currently only CLI interface)
 - Available only on **Linux** for now
 - Configuration is stored in JSON files:
   - `people.json`
   - `groups.json`
-
-These files must be placed in the appropriate binary/config directory.
+  - `confing.json`
 
 ---
 
@@ -51,7 +50,7 @@ At the moment there is **no installer**.
 
 To run the app:
 1. Build the binary
-2. Configure a system timer (e.g. a systemd timer) to periodically run it
+2. Configure a system timer (e.g. a systemd timer) to periodically run it (use help of AI of choice :>)
 3. Place `people.json` and `groups.json` next to the compiled binary or in the expected config directory
 
 This will be simplified in the future.
@@ -63,7 +62,7 @@ This will be simplified in the future.
 - Proper GUI
 - Android version (with contacts and call log integration)
 - Installer
-- More user-friendly configuration
+- More user-friendly configuration (installer)
 
 ---
 
