@@ -37,8 +37,22 @@ class Program
         Core.Run(command, state, log);
 
         //write & modify data
-        foreach(var elt in state.people)
-            Console.WriteLine(elt);
+        if (command is ListCommand listCmd)
+        {
+            if (listCmd.Group)
+            {
+                Console.WriteLine("Listing groups: ");
+                foreach(var elt in state.groups)
+                    Console.WriteLine(elt);
+            }
+            if (listCmd.People)
+            {
+                Console.WriteLine("Listing people: ");
+                foreach(var elt in state.people)
+                    Console.WriteLine(elt);
+            }
+        }
+
         if(!dryRun)
           DataIO.SaveState(state, log);
     }
@@ -76,8 +90,14 @@ class Program
         rootCommand.Subcommands.Add(addCommand);
 
         //add person subcommand
-        Argument<string> nameArgument = new("name");
-        Argument<string> descriptionArgument = new("description");
+        Argument<string> nameArgument = new("name")
+        {
+            Description = "Name of the person, pass in '' brackets"
+        };
+        Argument<string> descriptionArgument = new("description")
+        {
+            Description = "Description of the person, pass in '' brackets"
+        };
         Option<string> lastSpokeOpt = new("--last")
         {
             Description = "Last spoke date (ISO 8601 format, e.g. 2024-01-31T14:30:00)"
@@ -111,21 +131,21 @@ class Program
         {
             Description = "How much days interval should be there."
         }; 
-        Argument<double> notifyHourArgument = new("hour")
+        Option<double> notifyHourOption = new("hour")
         {
             Description = "At which hour the notification should appear"
         };
 
         Command addGroupCommand = new("group", "Adds new group");
         addGroupCommand.Arguments.Add(nameArgument); addGroupCommand.Arguments.Add(descriptionArgument);
-        addGroupCommand.Arguments.Add(intervalDaysArgument); addGroupCommand.Arguments.Add(notifyHourArgument);
+        addGroupCommand.Arguments.Add(intervalDaysArgument); addGroupCommand.Options.Add(notifyHourOption);
 
         addGroupCommand.SetAction(parseResult =>
         {
             string? name = parseResult.GetValue(nameArgument);
             string? descr = parseResult.GetValue(descriptionArgument);
             double intervalDays = parseResult.GetValue(intervalDaysArgument);
-            double notifyHour = parseResult.GetValue(notifyHourArgument);
+            double? notifyHour = parseResult.GetValue(notifyHourOption);
 
             var command = new AddGroupCommand(name, intervalDays, notifyHour, descr);
             CoreMain(command, logFlag, dryRunFlag);
@@ -149,10 +169,15 @@ class Program
         listCommand.Options.Add(groupsOpt); listCommand.Options.Add(peopleOpt);
         listCommand.SetAction(parseResult =>
         {
-            bool groups = parseResult.GetValue(groupsOpt);
-            bool people = parseResult.GetValue(peopleOpt);
+            bool Groups = parseResult.GetValue(groupsOpt);
+            bool People = parseResult.GetValue(peopleOpt);
 
-            var command = new ListCommand(groups, people);
+            if(!Groups && !People) //if not specified, list all
+            {
+                Groups = true; People = true;
+            }
+
+            var command = new ListCommand(Groups, People);
             CoreMain(command, logFlag, dryRunFlag);
         });
 
