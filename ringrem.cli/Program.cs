@@ -18,7 +18,7 @@ class Program
         //prepare log
         ILog? log = null;  
         if(logFlag)
-            log = null;
+            log = new StandardLog();
 
         //prepare data
         var now = DateTime.Now;
@@ -54,7 +54,9 @@ class Program
         }
 
         if(!dryRun)
-          DataIO.SaveState(state, log);
+            DataIO.SaveState(state, log);
+        if(logFlag)
+            log?.Write();
     }
 
     static void BuildRootCommand(string[] args)
@@ -62,8 +64,18 @@ class Program
 
         RootCommand rootCommand = new("Command-line tool for reminding about contacts based on last interaction time");
 
-        var logFlag = false;
-        var dryRunFlag = true;
+        Option<bool> logOption = new("--log")
+        {
+            Description = "Return logs"
+        };
+
+        Option<bool> dryRunOption = new("--dry")
+        {
+            Description = "Do not modify data"
+        };
+
+        logOption.Recursive = true; dryRunOption.Recursive = true;
+        rootCommand.Options.Add(logOption); rootCommand.Options.Add(dryRunOption);
 
         //notify subcommand
         Command notifyCommand = new("notify", "Checks which people should be notified and updates database");
@@ -80,7 +92,7 @@ class Program
             bool nowFlag = parseResult.GetValue(nowOption);
 
             var command = new RunNotifyCommand(nowFlag);
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         rootCommand.Subcommands.Add(notifyCommand);
@@ -121,7 +133,7 @@ class Program
             int? groupId = parseResult.GetValue(groupIdOpt);
 
             var command = new AddPersonCommand(name, groupId, descr, date);
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         addCommand.Subcommands.Add(addPersonCommand);
@@ -148,7 +160,7 @@ class Program
             double? notifyHour = parseResult.GetValue(notifyHourOption);
 
             var command = new AddGroupCommand(name, intervalDays, notifyHour, descr);
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         addCommand.Subcommands.Add(addGroupCommand);
@@ -178,7 +190,7 @@ class Program
             }
 
             var command = new ListCommand(Groups, People);
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         // remove subcommand
@@ -199,7 +211,7 @@ class Program
             int personId = parseResult.GetValue(personIdArgument);
 
             var command = new RemovePersonCommand(personId);
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         removeCommand.Subcommands.Add(removePersonCommand);
@@ -245,7 +257,7 @@ class Program
                 newGroupId
             );
 
-            CoreMain(command, logFlag, dryRunFlag);
+            CoreMain(command, parseResult.GetValue(logOption), parseResult.GetValue(dryRunOption));
         });
 
         removeCommand.Subcommands.Add(removeGroupCommand);
