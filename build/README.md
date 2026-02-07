@@ -14,11 +14,16 @@ dotnet publish ringrem.cli/ringrem.cli.csproj   -c Release   -r linux-x64   --se
 ```
 Output will be in ringrem/out with binary ringrem.cli. Keep all files, including .dlls and configuration assets.
 
+---
+
 ## 2. Prepare the Debian Package Structure
 Copy your build output mimcing root structure of your machine in, treating ringrem directory as root:
 ```sh
 cp -r out/* build/ringrem/usr/lib/ringrem/
 ```
+
+---
+
 ## 3. Build the Debian Package
 Run:
 ```sh
@@ -28,14 +33,18 @@ This will produce:
 ```sh
 build/ringrem.deb
 ```
+---
+
 ## 4. Install the Package
 ```sh
 apt install ./build/ringrem.deb
 ```
 
-Files will be installed to /usr/lib/ringrem/
-A symlink /usr/bin/ringrem will be created
-Systemd timer will be enabled and started automatically
+-Files will be installed to /usr/lib/ringrem/
+-A symlink /usr/bin/ringrem will be created
+-Systemd timer will be enabled and started automatically
+
+---
 
 ## 5. Verify Installation
 Check the CLI: 
@@ -49,6 +58,8 @@ Check the timer:
 systemctl status ringrem.timer
 systemctl list-timers | grep ringrem
 ```
+
+---
 
 ## 6. Remove the Package (if you want to)
 This removes the package, symlink, systemd timer, and optionally configuration files:

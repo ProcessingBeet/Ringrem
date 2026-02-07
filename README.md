@@ -28,7 +28,7 @@ The idea is simple:
   - checks who should be contacted,
   - sends a notification if a call is due.
 
-This is **not a calendar app** — it’s a lightweight reminder system based on real call activity.
+This is **not a calendar app** — it’s a lightweight (~20 MB) reminder system based on real call activity.
 
 ---
 
@@ -44,16 +44,12 @@ This is **not a calendar app** — it’s a lightweight reminder system based on
 
 ---
 
-## Installation (current, manual)
+## Installation 
 
-At the moment there is **no installer**.
+To build the Debian package manually, see `build/README.md`.
 
-To run the app:
-1. Build the binary
-2. Configure a system timer (e.g. a systemd timer) to periodically run it (use help of AI of choice :>)
-3. Place `people.json` and `groups.json` next to the compiled binary or in the expected config directory
-
-This will be simplified in the future.
+Alternatively, you can download the latest `.deb` package from `build/versions`
+and install it using: `sudo apt install [path_to_deb_package]`.
 
 ---
 
@@ -61,8 +57,6 @@ This will be simplified in the future.
 
 - Proper GUI
 - Android version (with contacts and call log integration)
-- Installer
-- More user-friendly configuration (installer)
 
 ---
 
